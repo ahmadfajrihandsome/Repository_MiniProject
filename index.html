@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMK Wikrama Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Animated background particles -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <header class="dashboard-header">
+    <div class="header-brand">
+      <img src="images/logo.png" class="header-logo-img" alt="SMK Wikrama Kota Bogor" />
+      <div class="header-titles">
+        <h1>SMK Wikrama Kota Bogor</h1>
+        <span class="header-subtitle">Student Dashboard</span>
+      </div>
+    </div>
+    <button id="theme-toggle" class="btn btn--icon" aria-label="Toggle light/dark theme">&#127769;</button>
+  </header>
+
+  <main class="dashboard-grid">
+
+    <!-- Greeting Widget — spans full width, hero style -->
+    <section id="greeting-widget" class="widget widget--hero">
+      <div class="hero-left">
+        <p id="greeting-text" class="greeting-text"></p>
+        <p id="greeting-time" class="greeting-time"></p>
+        <p id="greeting-date" class="greeting-date"></p>
+      </div>
+      <form id="name-form" class="name-form" novalidate>
+        <label for="name-input" class="form-label">Your name</label>
+        <div class="input-row">
+          <input type="text" id="name-input" class="input" maxlength="50"
+            placeholder="Enter your name" autocomplete="off" />
+          <button type="submit" class="btn btn--gold">Save</button>
+        </div>
+        <p id="name-error" class="error-msg" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Timer Widget -->
+    <section id="timer-widget" class="widget widget--accent-top">
+      <h2 class="widget-title"><span class="widget-icon">&#9203;</span> Pomodoro Timer</h2>
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="timer-ring__track" cx="60" cy="60" r="52"/>
+          <circle id="timer-ring-fill" class="timer-ring__fill" cx="60" cy="60" r="52"/>
+        </svg>
+        <div id="timer-display" class="timer-display">25:00</div>
+      </div>
+      <div id="timer-notification" class="timer-notification hidden" aria-live="assertive">
+        &#127881; Session complete!
+      </div>
+      <div class="timer-controls">
+        <button id="timer-start" class="btn btn--primary">&#9654; Start</button>
+        <button id="timer-stop" class="btn btn--secondary" disabled>&#9646;&#9646; Stop</button>
+        <button id="timer-reset" class="btn btn--secondary">&#8635; Reset</button>
+      </div>
+      <form id="duration-form" class="duration-form" novalidate>
+        <label for="duration-input" class="form-label">Duration (minutes)</label>
+        <div class="input-row">
+          <input type="number" id="duration-input" class="input" min="1" max="60" placeholder="1–60" />
+          <button type="submit" class="btn btn--primary">Set</button>
+        </div>
+        <p id="duration-error" class="error-msg" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Daily Motivation Streak Widget -->
+    <section id="streak-widget" class="widget widget--streak">
+      <div class="streak-header">
+        <h2 class="widget-title" style="margin-bottom:0"><span class="widget-icon">&#127775;</span> Daily Motivation</h2>
+        <span id="streak-badge" class="streak-badge">
+          <span class="streak-badge__flame">&#128293;</span>
+          <span id="streak-count">1</span>&nbsp;day streak
+        </span>
+      </div>
+      <span id="streak-milestone" class="streak-milestone hidden" aria-live="polite"></span>
+      <div class="quote-card">
+        <p id="quote-text" class="quote-card__text"></p>
+        <p id="quote-author" class="quote-card__author"></p>
+      </div>
+      <div class="quote-actions">
+        <button id="quote-next" class="btn btn--gold btn--small">Next quote &#8594;</button>
+        <div class="quote-progress">
+          <span class="quote-progress__label">Today&#39;s progress</span>
+          <div class="quote-progress__bar-track">
+            <div id="quote-progress-fill" class="quote-progress__bar-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Todo Widget -->
+    <section id="todo-widget" class="widget widget--accent-top">
+      <h2 class="widget-title"><span class="widget-icon">&#10003;</span> Tasks</h2>
+      <form id="todo-form" class="todo-form" novalidate>
+        <div class="input-row">
+          <input type="text" id="todo-input" class="input" maxlength="200"
+            placeholder="Add a task…" autocomplete="off" />
+          <button type="submit" class="btn btn--primary">Add</button>
+        </div>
+        <p id="todo-error" class="error-msg" aria-live="polite"></p>
+      </form>
+      <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
+    </section>
+
+    <!-- Links Widget -->
+    <section id="links-widget" class="widget">
+      <h2 class="widget-title"><span class="widget-icon">&#128279;</span> Quick Links</h2>
+      <form id="links-form" class="links-form" novalidate>
+        <div class="form-group">
+          <label for="link-label-input" class="form-label">Label</label>
+          <input type="text" id="link-label-input" class="input" maxlength="50"
+            placeholder="e.g. Classroom" autocomplete="off" />
+          <p id="link-label-error" class="error-msg" aria-live="polite"></p>
+        </div>
+        <div class="form-group">
+          <label for="link-url-input" class="form-label">URL</label>
+          <input type="url" id="link-url-input" class="input"
+            placeholder="https://example.com" autocomplete="off" />
+          <p id="link-url-error" class="error-msg" aria-live="polite"></p>
+        </div>
+        <p id="link-cap-error" class="error-msg" aria-live="polite"></p>
+        <button type="submit" class="btn btn--primary">Add Link</button>
+      </form>
+      <div id="links-list" class="links-list" aria-label="Quick links"></div>
+    </section>
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
